@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt};
 
 // https://stackoverflow.com/a/34324856
 // count using recursion (i think)
@@ -15,6 +15,17 @@ macro_rules! op {
 
         #[allow(non_upper_case_globals)] // not upper case to differentiate from others
         pub const operators: [Operator; count!($($lex)*)] = [$($lex),*];
+        // pub fn encode() -> HashMap<String, Operator> {
+        //     HashMap::from([
+        //         $(($true.to_string(), $lex)),*
+        //     ])
+        // }
+
+        // pub fn decode() -> HashMap<Operator, String> {
+        //     HashMap::from([
+        //         $(($lex, $true.to_string())),*
+        //     ])
+        // }
     };
 }
 
@@ -25,6 +36,10 @@ impl fmt::Display for Operator {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
     }
+}
+
+pub fn from_string(string: &String) -> Option<Operator> {
+    operators.into_iter().find(|x| x.0 == string)
 }
 
 op!{
