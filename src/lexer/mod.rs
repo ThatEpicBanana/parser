@@ -44,7 +44,7 @@ pub enum Token {
 
     // operators
     UNK_OPERATOR(String),
-    OPERATOR(Operator),
+    OPERATOR(Operator, bool),
 }
 
 impl fmt::Display for Token {
@@ -58,41 +58,30 @@ impl fmt::Display for Token {
             IDENTIFIER(x) => write!(f, "{}", x),
             KEYWORD(x) => write!(f, "{}", x),
             UNK_OPERATOR(x) => write!(f, "{}", x),
-            OPERATOR(x) => write!(f, "{}", x),
+            OPERATOR(x, true) => write!(f, "{}=", x),
+            OPERATOR(x, false) => write!(f, "{}", x),
         }
     }
 }
 
+mod util {
+    use super::prelude::*;
 
-// - reserved stuff -
-fn identifier() -> impl Parser<char, Token, Error = Simple<char>> {
-    text::ident::<char, _>()
-        .map(|string| {
-            if let Some(identifier) = keyword::from_string(&string) {
-                KEYWORD(identifier)
-            } else {
-                match string.as_str() {
-                    "true" => BOOLEAN(true),
-                    "false" => BOOLEAN(false),
-                    _ => IDENTIFIER(string),
-                }
-            }
-        })
-}
+    pub fn id(string: &str) -> Token {
+        IDENTIFIER(string.to_string())
+    }
 
+    pub fn float(string: &str) -> Token {
+        FLOAT(string.to_string())
+    }
 
-// choose(operator).or(filter_operator())
+    pub fn string(string: &str) -> Token {
+        STRING(string.to_string())
+    }
 
-fn operator() -> impl Parser<char, Token, Error = Simple<char>> {
-    filter::<char, _, _>(|c| c.is_ascii_punctuation())
-        .repeated().at_least(1).collect()
-        .map(|string| {
-            if let Some(operator) = operator::from_string(&string) {
-                OPERATOR(operator)
-            } else {
-                UNK_OPERATOR(string)
-            }
-        })
+    pub fn unk_op(string: &str) -> Token {
+        UNK_OPERATOR(string.to_string())
+    }
 }
 
 
@@ -102,29 +91,28 @@ fn operator() -> impl Parser<char, Token, Error = Simple<char>> {
 /// ```
 /// use parser::lexer::prelude::*;
 /// 
-/// let result = lexer::create().parse("as `@e`: say(\"hi\")").unwrap();
+/// let result = lexer::create().parse("as @e: say(\"hi\")").unwrap();
 /// let result: Vec<Token> = result.into_iter().map(|x| x.0).collect();
 /// 
 /// assert_eq!(result, vec![
 ///     kw(KW_AS), 
-///     op(OP_BACKTICK), op(OP_AT), IDENTIFIER("e".to_string()), op(OP_BACKTICK),
+///     op(OP_AT), id("e"), 
 ///     op(OP_COLON),
-///     IDENTIFIER("say".to_string()),
-///     STRING("hi".to_string()),
+///     id("say"),
+///     op(OP_LPARA), string("hi"), op(OP_RPARA),
 /// ]);
 /// ```
 pub fn create() -> impl Parser<char, Vec<(Token, Span)>, Error = Simple<char>> {
+    use atom::*;
+
     let token = choice((
-        atom::string(),
-        atom::float(),
-        atom::integer(),
-        identifier(),
-        operator(),
+        string(),
+        float(), integer(),
+        identifier(), operator(),
     )).recover_with(skip_then_retry_until([]));
-    
 
     token
+        .padded_by(comment().repeated())
         .map_with_span(|token, span| (token, span))
-        .padded()
-        .repeated()
+        .padded().repeated()
 }

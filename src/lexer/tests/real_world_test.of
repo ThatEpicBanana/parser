@@ -1,0 +1,4 @@
+pub func main() {
+    as @a:
+        clear("tnt"id);
+}
