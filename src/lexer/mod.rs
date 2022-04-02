@@ -44,7 +44,10 @@ pub enum Token {
 
     // operators
     UNK_OPERATOR(String),
-    OPERATOR(Operator, bool),
+    OPERATOR{op: Operator, assignment: bool},
+
+    // comments
+    DOC_COMMENT{com: String, inner: bool},
 }
 
 impl fmt::Display for Token {
@@ -58,8 +61,14 @@ impl fmt::Display for Token {
             IDENTIFIER(x) => write!(f, "{}", x),
             KEYWORD(x) => write!(f, "{}", x),
             UNK_OPERATOR(x) => write!(f, "{}", x),
-            OPERATOR(x, true) => write!(f, "{}=", x),
-            OPERATOR(x, false) => write!(f, "{}", x),
+            OPERATOR{op, assignment} => {
+                if *assignment { write!(f, "{}=", op) }
+                else { write!(f, "{}", op) }
+            },
+            DOC_COMMENT{com, inner} => {
+                if *inner { write!(f, "/*!{}*/", com) }
+                else { write!(f, "/**{}*/", com) }
+            },
         }
     }
 }
@@ -95,11 +104,8 @@ mod util {
 /// let result: Vec<Token> = result.into_iter().map(|x| x.0).collect();
 /// 
 /// assert_eq!(result, vec![
-///     kw(KW_AS), 
-///     op(OP_AT), id("e"), 
-///     op(OP_COLON),
-///     id("say"),
-///     op(OP_LPARA), string("hi"), op(OP_RPARA),
+///     kw(KW_AS), op(OP_AT), id("e"), op(OP_COLON),
+///     id("say"), op(OP_LPARA), string("hi"), op(OP_RPARA),
 /// ]);
 /// ```
 pub fn create() -> impl Parser<char, Vec<(Token, Span)>, Error = Simple<char>> {

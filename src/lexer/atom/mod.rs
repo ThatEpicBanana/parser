@@ -5,6 +5,9 @@ mod number;
 pub use number::integer;
 pub use number::float;
 
+mod comment;
+pub use comment::*;
+
 use chumsky::prelude::*;
 use crate::lexer::prelude::*;
 
@@ -28,32 +31,14 @@ pub fn identifier() -> impl Parser<char, Token, Error = Simple<char>> {
 pub fn operator() -> impl Parser<char, Token, Error = Simple<char>> {
     choice((
         operator::any_cmp() // comparison operators ex: `==`
-            .map(|op| OPERATOR(op, false)),
+            .map(|opr| op(opr)),
         operator::any_op() 
-            .map(|op| OPERATOR(op, false)),
+            .map(|opr| op(opr)),
         operator::any_assign()
             .then(just('=').or_not())
-            .map(|(op, assign)| OPERATOR(op, assign.is_some())),
+            .map(|(op, assign)| OPERATOR{op, assignment: assign.is_some()}),
         filter::<char, _, _>(|c| c.is_ascii_punctuation())
             .repeated().at_least(1).collect()
-            .map(|op| UNK_OPERATOR(op))
+            .map(|opr| UNK_OPERATOR(opr))
     ))
-}
-
-
-pub fn comment() -> impl Parser<char, (), Error = Simple<char>> + Clone {
-    let single = just("//")
-        .then(take_until(just('\n')))
-        .padded().ignored();
-
-    let multi = recursive(|multi| 
-        just("/*")
-            .then(take_until(
-                just("*/").ignored()
-                .or(multi)
-            ))
-            .padded().ignored()
-    );
-
-    single.or(multi)
 }

@@ -171,8 +171,8 @@ pub mod operator {
     use crate::lexer::Token;
     use super::*;
 
-    pub fn op(operator: Operator) -> Token { Token::OPERATOR(operator, false) }
-    pub fn op_equals(operator: Operator) -> Token { Token::OPERATOR(operator, true) }
+    pub fn op(op: Operator) -> Token { Token::OPERATOR{op, assignment: false} }
+    pub fn op_equals(op: Operator) -> Token { Token::OPERATOR{op, assignment: true} }
     
     // - actual definitions -
     op_macro!{

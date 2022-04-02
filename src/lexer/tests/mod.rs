@@ -59,3 +59,11 @@ fn real_world() -> Result<(), Vec<Simple<char>>> {
         op(OP_RCURLY)
     ])
 }
+
+#[test]
+fn comments() -> Result<(), Vec<Simple<char>>> {
+    test(include_str!("comments.of"), vec![
+        id("token"), id("here"), 
+        id("these"), id("should"), id("though"), 
+    ])
+}

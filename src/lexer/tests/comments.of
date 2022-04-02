@@ -1,0 +1,22 @@
+/*
+    outside /*
+        // yep comments
+    */ and here too
+
+    /*
+        here's another
+    */
+*/
+
+// inline woo
+
+token here
+
+/* not here */
+
+/**/ // these shouldn't exist
+/***/
+
+these /* */ should though
+
+
