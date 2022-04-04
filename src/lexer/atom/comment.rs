@@ -4,8 +4,11 @@ use crate::lexer::prelude::*;
 //TODO: doc comments
 pub fn comment() -> impl Parser<char, (), Error = Simple<char>> + Clone {
     let single = just("//")
-        .then(take_until(just('\n')))
-        .padded();
+        .then(none_of("/!"))
+        .then(take_until(
+            just("\r\n")
+            .or(just("\n"))
+        )).padded();
 
     let multi = just("/*").then(
         none_of("*!").ignored()
@@ -26,9 +29,10 @@ pub fn comment() -> impl Parser<char, (), Error = Simple<char>> + Clone {
     choice((
         just("/**/").ignored(),
         just("/***/").ignored(),
+    )).or(choice((
         single.ignored(),
         multi.ignored(),
-    )).padded()
+    ))).padded()
 }
 
 pub fn doc_comment() -> impl Parser<char, Token, Error = Simple<char>> {
@@ -37,10 +41,12 @@ pub fn doc_comment() -> impl Parser<char, Token, Error = Simple<char>> {
                 just("!").to(true)
             .or(just("/").to(false))
         ).then( // go until end and collect into string
-            take_until(just('\n'))
-            .map(|(vec, end)| vec)
+            take_until(
+                just("\r\n")
+                .or(just("\n"))
+            ).map(|(vec, _)| vec) // reject newline
             .collect()
-        ).map(|((_, inner), com)| DOC_COMMENT{ com, inner });
+        ).map(|((_, inner), com)| DOC_COMMENT{ com, inner }); 
 
     single
 }

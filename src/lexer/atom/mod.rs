@@ -30,8 +30,6 @@ pub fn identifier() -> impl Parser<char, Token, Error = Simple<char>> {
 
 pub fn operator() -> impl Parser<char, Token, Error = Simple<char>> {
     choice((
-        operator::any_cmp() // comparison operators ex: `==`
-            .map(|opr| op(opr)),
         operator::any_op() 
             .map(|opr| op(opr)),
         operator::any_assign()

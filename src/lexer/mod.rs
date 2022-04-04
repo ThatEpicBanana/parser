@@ -80,6 +80,10 @@ mod util {
         IDENTIFIER(string.to_string())
     }
 
+    pub fn integer(number: usize) -> Token {
+        INTEGER(number)
+    }
+
     pub fn float(string: &str) -> Token {
         FLOAT(string.to_string())
     }
@@ -90,6 +94,14 @@ mod util {
 
     pub fn unk_op(string: &str) -> Token {
         UNK_OPERATOR(string.to_string())
+    }
+
+    pub fn doc_in(string: &str) -> Token {
+        DOC_COMMENT { com: string.to_string(), inner: true }
+    }
+
+    pub fn doc_out(string: &str) -> Token {
+        DOC_COMMENT { com: string.to_string(), inner: false }
     }
 }
 
@@ -111,11 +123,14 @@ mod util {
 pub fn create() -> impl Parser<char, Vec<(Token, Span)>, Error = Simple<char>> {
     use atom::*;
 
-    let token = choice((
-        string(),
-        float(), integer(),
-        identifier(), operator(),
-    )).recover_with(skip_then_retry_until([]));
+    let token = 
+        doc_comment().or(
+            choice((
+                string(),
+                float(), integer(),
+                identifier(), operator(),
+            ))
+        ).recover_with(skip_then_retry_until([]));
 
     token
         .padded_by(comment().repeated())

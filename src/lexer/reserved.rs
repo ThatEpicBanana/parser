@@ -101,46 +101,35 @@ pub mod operator {
     // macro for constructing the operators
     macro_rules! op_macro {
         { 
-            { $( $clex:ident = $ctrue:expr),* $(,)? } 
-            { $( $lex:ident = $true:expr),* $(,)? } 
+            { $( $lex_one:ident = $true_one:expr),* $(,)? } 
+            { $( $lex_two:ident = $true_two:expr),* $(,)? } 
             { $( $alex:ident = $atrue:expr),* $(,)? } 
         } => {
             pub mod list {
                 use super::Operator;
 
                 // constants
-                $( pub const $clex: Operator = Operator($ctrue); )*
-                $( pub const $lex: Operator = Operator($true); )*
+                $( pub const $lex_one: Operator = Operator($true_one); )*
+                $( pub const $lex_two: Operator = Operator($true_two); )*
                 $( pub const $alex: Operator = Operator($atrue); )*
             }
 
             use list::*;
     
             // arrays
-            #[allow(non_upper_case_globals)] // not upper case to differentiate from others
-            pub const comparison_operators: [Operator; count!($($clex)*)] = [$($clex),*];
             #[allow(non_upper_case_globals)] 
-            pub const operators: [Operator; count!($($lex)* $($alex)*)] = [$($lex),* , $($alex),*];
-
-            // use chumsky::prelude::*;
-
-            /// **Returns:** a parser for any compariosn operator (ex: `==`) or just `=`
-            /// 
-            /// This is to differentiate comparison operators from normal operators for operator assignments
-            pub fn any_cmp() -> impl Parser<char, Operator, Error = Simple<char>> {
-                choice((
-                    $(
-                        just($ctrue).to($clex)
-                    ),*
-                ))
-            }
+            pub const operators: [Operator; count!($($lex_one)* $($lex_two)* $($alex)*)] = [$($lex_one),* , $($lex_two),* , $($alex),*];
 
             pub fn any_op() -> impl Parser<char, Operator, Error = Simple<char>> {
                 choice((
                     $(
-                        just($true).to($lex)
+                        just($true_one).to($lex_one)
                     ),*
-                ))
+                )).or(choice((
+                    $(
+                        just($true_two).to($lex_two)
+                    ),*
+                )))
             }
 
             pub fn any_assign() -> impl Parser<char, Operator, Error = Simple<char>> {
@@ -177,6 +166,10 @@ pub mod operator {
     // - actual definitions -
     op_macro!{
         { 
+            // item
+            OP_EQUAL_ARROW = "=>", 
+            OP_RETURN = "->",
+
             // comparison
             OP_EQUAL = "=",
             OP_DOUBLE_EQUAL = "==", OP_FUZZY_EQUAL = "~=", OP_NOT_EQUAL = "!=", OP_FUZZY_NOT_EQUAL = "!~=",
@@ -197,10 +190,6 @@ pub mod operator {
             OP_LPARA   = "(", OP_RPARA   = ")",
             OP_LSQUARE = "[", OP_RSQUARE = "]",
             OP_LANGLE  = "<", OP_RANGLE  = ">",
-        
-            // item
-            OP_EQUAL_ARROW = "=>", 
-            OP_RETURN = "->",
         } {
             // operator expression
             //   multiple

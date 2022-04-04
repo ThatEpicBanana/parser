@@ -67,3 +67,16 @@ fn comments() -> Result<(), Vec<Simple<char>>> {
         id("these"), id("should"), id("though"), 
     ])
 }
+
+#[test]
+fn add_one() -> Result<(), Vec<Simple<char>>> {
+    test(include_str!("add_one.of"), vec![
+        doc_in(" crate about arithmetic idk"),
+
+        doc_out(" Adds one to the given number"),
+
+        kw(KW_PUB), kw(KW_FUNC), id("add_one"), 
+        op(OP_LPARA), id("x"), op(OP_COLON), id("int"), op(OP_RPARA),
+        op(OP_EQUAL_ARROW), id("x"), op(OP_PLUS), integer(1), op(OP_SEMI),
+    ])
+}
