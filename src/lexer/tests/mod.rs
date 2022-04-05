@@ -65,6 +65,10 @@ fn comments() -> Result<(), Vec<Simple<char>>> {
     test(include_str!("comments.of"), vec![
         id("token"), id("here"), 
         id("these"), id("should"), id("though"), 
+        doc_out(" this is a doc comment\n this should be concatenated"),
+        doc_in(" inner comment"),
+        doc_out("\nouter block comment\n\n\\*/ with escape\n\n"), 
+        doc_in(" inner block comment ")
     ])
 }
 

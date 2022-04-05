@@ -23,7 +23,7 @@ pub mod keyword {
     
     // - various stuff for storing a keyword -
     #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-    pub struct Keyword(&'static str);
+    pub struct Keyword(pub &'static str);
     
     impl fmt::Display for Keyword {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -144,7 +144,7 @@ pub mod operator {
     
     // - various stuff for storing an operator -
     #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-    pub struct Operator(&'static str);
+    pub struct Operator(pub &'static str);
     
     impl fmt::Display for Operator {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

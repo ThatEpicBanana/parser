@@ -19,4 +19,17 @@ token here
 
 these /* */ should though
 
+/// this is a doc comment
+/// this should be concatenated
+
+//! inner comment
+
+/**
+outer block comment
+
+\*/ with escape
+
+*/
+
+/*! inner block comment */
 

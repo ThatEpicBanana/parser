@@ -59,9 +59,9 @@ impl fmt::Display for Token {
             INTEGER(x) => write!(f, "{}", x),
             FLOAT(x) => write!(f, "{}", x),
             IDENTIFIER(x) => write!(f, "{}", x),
-            KEYWORD(x) => write!(f, "{}", x),
+            KEYWORD(Keyword(x)) => write!(f, "{}", x),
             UNK_OPERATOR(x) => write!(f, "{}", x),
-            OPERATOR{op, assignment} => {
+            OPERATOR{op: Operator(op), assignment} => {
                 if *assignment { write!(f, "{}=", op) }
                 else { write!(f, "{}", op) }
             },
