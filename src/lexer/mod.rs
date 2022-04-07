@@ -20,8 +20,10 @@ pub use Token::*;
 pub use reserved::*;
 
 
+use crate::prelude::Ident;
+
 // span type
-type Span = std::ops::Range<usize>;
+use super::Span;
 
 
 // - token type stuff -
@@ -50,6 +52,17 @@ pub enum Token {
     DOC_COMMENT{com: String, inner: bool},
 }
 
+// impl Token {
+//     /// Turns an IDENTIFIER token into an Ident parser atom
+//     pub fn ident(&self) -> Ident {
+//         match &self {
+//             IDENTIFIER(x) => Ident::new(x.to_string()),
+//             _ => panic!("Tried to turn a non-identifier token into an Ident!")
+//         }
+//     }
+// }
+
+
 impl fmt::Display for Token {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // i don't know if there's a better way to do this
@@ -60,7 +73,7 @@ impl fmt::Display for Token {
             FLOAT(x) => write!(f, "{}", x),
             IDENTIFIER(x) => write!(f, "{}", x),
             KEYWORD(Keyword(x)) => write!(f, "{}", x),
-            UNK_OPERATOR(x) => write!(f, "{}", x),
+            UNK_OPERATOR(x) => write!(f, "unk({})", x),
             OPERATOR{op: Operator(op), assignment} => {
                 if *assignment { write!(f, "{}=", op) }
                 else { write!(f, "{}", op) }

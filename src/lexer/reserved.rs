@@ -169,6 +169,7 @@ pub mod operator {
             // item
             OP_EQUAL_ARROW = "=>", 
             OP_RETURN = "->",
+            OP_HASH = "#", OP_EXCLAMATION = "!",
 
             // comparison
             OP_EQUAL = "=",
@@ -184,6 +185,7 @@ pub mod operator {
             // seperations
             OP_SEMI = ";",
             OP_COMM = ",",
+            OP_DOT = ".",
         
             // brackets
             OP_LCURLY  = "{", OP_RCURLY  = "}",

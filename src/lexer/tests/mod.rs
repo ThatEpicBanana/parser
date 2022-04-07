@@ -9,15 +9,19 @@ use crate::lexer::prelude::*;
 fn test(src: &str, expected: Vec<Token>) -> Result<(), Vec<Simple<char>>> {
     let result = lexer::create().parse_recovery(src);
 
-    match result.0 {
-        Some(x) => {
-            let result: Vec<Token> = x.into_iter().map(|x| x.0).collect();
+    if result.1.len() == 0 {
+        match result.0 {
+            Some(x) => {
+                let result: Vec<Token> = x.into_iter().map(|x| x.0).collect();
 
-            assert_eq!(result, expected);
-        },
-        None => {
-            return Err(result.1);
-        },
+                assert_eq!(result, expected);
+            },
+            None => {
+                return Err(result.1); // shouldn't be possible
+            },
+        }
+    } else {
+        return Err(result.1);
     }
 
     Ok(())
@@ -83,4 +87,9 @@ fn add_one() -> Result<(), Vec<Simple<char>>> {
         op(OP_LPARA), id("x"), op(OP_COLON), id("int"), op(OP_RPARA),
         op(OP_EQUAL_ARROW), id("x"), op(OP_PLUS), integer(1), op(OP_SEMI),
     ])
+}
+
+#[test]
+fn unknown_token() -> Result<(), Vec<Simple<char>>> {
+    test("", vec![])
 }
