@@ -28,5 +28,7 @@ fn outer_attribute() -> impl Parser<Token, Attribute, Error = Simple<Token>> {
             path::path().then(
                 just(op(OP_EQUAL))
             )
-        )
+        ) // or not, expect for errors?
+        // or or not, validate?
+        // add this as a utility for then
 }
