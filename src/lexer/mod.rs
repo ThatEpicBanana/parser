@@ -20,8 +20,6 @@ pub use Token::*;
 pub use reserved::*;
 
 
-use crate::prelude::Ident;
-
 // span type
 use super::Span;
 
@@ -72,9 +70,9 @@ impl fmt::Display for Token {
             INTEGER(x) => write!(f, "{}", x),
             FLOAT(x) => write!(f, "{}", x),
             IDENTIFIER(x) => write!(f, "{}", x),
-            KEYWORD(Keyword(x)) => write!(f, "{}", x),
+            KEYWORD(x) => write!(f, "{}", x),
             UNK_OPERATOR(x) => write!(f, "unk({})", x),
-            OPERATOR{op: Operator(op), assignment} => {
+            OPERATOR{op, assignment} => {
                 if *assignment { write!(f, "{}=", op) }
                 else { write!(f, "{}", op) }
             },
@@ -103,6 +101,10 @@ mod util {
 
     pub fn string(string: &str) -> Token {
         STRING(string.to_string())
+    }
+
+    pub fn op(op: operator::Operator, assignment: bool) -> Token {
+        OPERATOR{op, assignment}
     }
 
     pub fn unk_op(string: &str) -> Token {

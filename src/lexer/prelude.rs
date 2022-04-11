@@ -3,8 +3,8 @@ pub use crate::lexer::{
     util::*,
     Token::{self, *},
     reserved::{
-        keyword::{self, list::*, kw},
-        operator::{self, list::*, op, op_equals},
+        keyword::{self, Keyword, list::*},
+        operator::{self, Operator, list::*}
     }
 };
 

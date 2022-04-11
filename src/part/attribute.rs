@@ -23,12 +23,10 @@ fn doc_comment(inn: bool) -> impl Parser<Token, Attribute, Error = Simple<Token>
 }
 
 fn outer_attribute() -> impl Parser<Token, Attribute, Error = Simple<Token>> {
-    just(op(OP_HASH))
-        .ignore_then(
-            path::path().then(
-                just(op(OP_EQUAL))
+    just(OP_HASH)
+        .ignore_then(path::path()
+            .then(
+                just(OP_EQUAL)
             )
-        ) // or not, expect for errors?
-        // or or not, validate?
-        // add this as a utility for then
+        ).delimited_by(just(OP_LSQUARE), just(OP_RSQUARE))
 }

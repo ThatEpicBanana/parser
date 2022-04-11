@@ -15,8 +15,8 @@ use crate::lexer::prelude::*;
 pub fn identifier() -> impl Parser<char, Token, Error = Simple<char>> {
     text::ident::<char, _>()
         .map(|string| {
-            if let Some(identifier) = super::reserved::keyword::from_string(&string) {
-                KEYWORD(identifier)
+            if let Some(identifier) = keyword::keywords.get(&string) {
+                KEYWORD(*identifier)
             } else {
                 match string.as_str() {
                     "true" => BOOLEAN(true),
@@ -30,9 +30,11 @@ pub fn identifier() -> impl Parser<char, Token, Error = Simple<char>> {
 
 pub fn operator() -> impl Parser<char, Token, Error = Simple<char>> {
     choice((
-        operator::any_op() 
-            .map(|opr| op(opr)),
-        operator::any_assign()
+            operator::any_match::top() 
+        .or(operator::any_match::bottom())
+        .or(operator::any_match::grouping())
+            .map(|opr| op(opr, false)),
+        operator::any_match::assign()
             .then(just('=').or_not())
             .map(|(op, assign)| OPERATOR{op, assignment: assign.is_some()}),
         filter::<char, _, _>(|c| c.is_ascii_punctuation())

@@ -39,10 +39,10 @@ fn general_test() -> Result<(), Vec<Simple<char>>> {
         float("3.1415"),
 
         id("Raycaster"),
-        kw(KW_MOD),
+        KW_MOD,
 
         unk_op("#.#"),
-        op(OP_PLUS)
+        OP_PLUS
     ])
 }
 
@@ -57,10 +57,10 @@ fn number_separation() -> Result<(), Vec<Simple<char>>> {
 #[test]
 fn real_world() -> Result<(), Vec<Simple<char>>> {
     test(include_str!("real_world_test.of"), vec![
-        kw(KW_PUB), kw(KW_FUNC), id("main"), op(OP_LPARA), op(OP_RPARA), op(OP_LCURLY),
-            kw(KW_AS), op(OP_AT), id("a"), op(OP_COLON),
-                id("clear"), op(OP_LPARA), string("tnt"), id("id"), op(OP_RPARA), op(OP_SEMI),
-        op(OP_RCURLY)
+        KW_PUB, KW_FUNC, id("main"), OP_LPARA, OP_RPARA, OP_LCURLY,
+            KW_AS, OP_AT, id("a"), OP_COLON,
+                id("clear"), OP_LPARA, string("tnt"), id("id"), OP_RPARA, OP_SEMI,
+        OP_RCURLY
     ])
 }
 
@@ -83,9 +83,9 @@ fn add_one() -> Result<(), Vec<Simple<char>>> {
 
         doc_out(" Adds one to the given number"),
 
-        kw(KW_PUB), kw(KW_FUNC), id("add_one"), 
-        op(OP_LPARA), id("x"), op(OP_COLON), id("int"), op(OP_RPARA),
-        op(OP_EQUAL_ARROW), id("x"), op(OP_PLUS), integer(1), op(OP_SEMI),
+        KW_PUB, KW_FUNC, id("add_one"), 
+        OP_LPARA, id("x"), OP_COLON, id("int"), OP_RPARA,
+        OP_EQUAL_ARROW, id("x"), OP_PLUS, integer(1), OP_SEMI,
     ])
 }
 

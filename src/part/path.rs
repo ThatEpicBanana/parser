@@ -83,23 +83,23 @@ impl From<&str> for Path {
 }
 
 fn path_part() -> impl Parser<Token, PathPart, Error = Simple<Token>> {
-    just(kw(KW_SUPER)).to(PathPart::Super)
-        .or(just(kw(KW_SELF)).to(PathPart::Selff))
+    just(KW_SUPER).to(PathPart::Super)
+        .or(just(KW_SELF).to(PathPart::Selff))
         .or(ident().map(|idt| PathPart::Id(idt)))
 }
 
 pub fn path() -> impl Parser<Token, Path, Error = Simple<Token>> {
     // root
-    just(kw(KW_BASKET)).to(PathRoot::Basket)
-        .or(just(kw(KW_THIS)).to(PathRoot::This))
+    just(KW_BASKET).to(PathRoot::Basket)
+        .or(just(KW_THIS).to(PathRoot::This))
         .or_not()
     .then(
         // optional : then part
-        just(op(OP_COLON))
+        just(OP_COLON)
             .ignore_then(path_part())
             .or_not()
         .chain( // then repeated . then part
-            just(op(OP_DOT))
+            just(OP_DOT)
                 .ignore_then(path_part())
                 .repeated()
         )
