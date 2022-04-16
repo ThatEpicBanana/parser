@@ -3,6 +3,7 @@ use std::ops::Deref;
 pub mod attribute;
 pub mod item;
 pub mod path;
+pub mod macros;
 
 use crate::prelude::*;
 

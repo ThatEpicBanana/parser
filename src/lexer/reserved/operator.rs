@@ -1,3 +1,9 @@
+// i'm sorry
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
+#![allow(unused_variables)]
+#![allow(non_upper_case_globals)]
+
 macro_rules! op_macro {
     {
         $(
@@ -18,8 +24,10 @@ macro_rules! op_macro {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                 match *self {
                     $($(
-                        $name => write!(f, "{}", $match)
-                    ),*),*
+                        Operator::$name => write!(f, "{}", $match),
+                    )*)*
+                    #[allow(deprecated)]
+                    Operator::Empty => write!(f, "OP_EMPTY")
                 }
             }
         }

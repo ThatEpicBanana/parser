@@ -1,9 +1,11 @@
 pub use crate::{
     lexer::prelude::*,
+    Opt,
     part::{
         *,
         item::Item,
         Ident,
+        path::Path,
     }
 };
 

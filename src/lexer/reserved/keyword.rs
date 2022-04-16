@@ -1,3 +1,9 @@
+// i'm sorry
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
+#![allow(unused_variables)]
+#![allow(non_upper_case_globals)]
+
 // macro for constructing the keywords
 macro_rules! kw_macro {
     { $( $name:ident = $match:expr),* $(,)? } => {
@@ -12,9 +18,9 @@ macro_rules! kw_macro {
         impl std::fmt::Display for Keyword {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                 match *self {
-                    $(
-                        $name => write!(f, "{}", $match)
-                    ),*
+                    $( 
+                        Keyword::$name => write!(f, "{}", $match), 
+                    )*
                 }
             }
         }

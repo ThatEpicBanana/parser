@@ -131,8 +131,8 @@ mod util {
 /// let result: Vec<Token> = result.into_iter().map(|x| x.0).collect();
 /// 
 /// assert_eq!(result, vec![
-///     kw(KW_AS), op(OP_AT), id("e"), op(OP_COLON),
-///     id("say"), op(OP_LPARA), string("hi"), op(OP_RPARA),
+///     KW_AS, OP_AT, id("e"), OP_COLON,
+///     id("say"), OP_LPARA, string("hi"), OP_RPARA,
 /// ]);
 /// ```
 pub fn create() -> impl Parser<char, Vec<(Token, Span)>, Error = Simple<char>> {
@@ -151,4 +151,5 @@ pub fn create() -> impl Parser<char, Vec<(Token, Span)>, Error = Simple<char>> {
         .padded_by(comment().repeated())
         .map_with_span(|token, span| (token, span))
         .padded().repeated()
+        .then_ignore(end())
 }
