@@ -31,7 +31,7 @@ fn test(src: &str, expected: Vec<Token>) -> Result<(), Vec<Simple<char>>> {
 
 #[test]
 fn general_test() -> Result<(), Vec<Simple<char>>> {
-    test(include_str!("general_test.of"), vec![
+    test(include_str!("general_test.sf"), vec![
         BOOLEAN(true),
 
         string("string1"),
@@ -50,7 +50,7 @@ fn general_test() -> Result<(), Vec<Simple<char>>> {
 
 #[test]
 fn number_separation() -> Result<(), Vec<Simple<char>>> {
-    test(include_str!("number_separation.of"), vec![
+    test(include_str!("number_separation.sf"), vec![
         INTEGER(1024), INTEGER(65535), INTEGER(10), INTEGER(1234), INTEGER(6969420),
         float("3.14"), float("3.1415")
     ])
@@ -58,7 +58,7 @@ fn number_separation() -> Result<(), Vec<Simple<char>>> {
 
 #[test]
 fn real_world() -> Result<(), Vec<Simple<char>>> {
-    test(include_str!("real_world_test.of"), vec![
+    test(include_str!("real_world_test.sf"), vec![
         KW_PUB, KW_FUNC, id("main"), OP_LPARA, OP_RPARA, OP_LCURLY,
             KW_AS, OP_AT, id("a"), OP_COLON,
                 id("clear"), OP_LPARA, string("tnt"), id("id"), OP_RPARA, OP_SEMI,
@@ -68,7 +68,7 @@ fn real_world() -> Result<(), Vec<Simple<char>>> {
 
 #[test]
 fn comments() -> Result<(), Vec<Simple<char>>> {
-    test(include_str!("comments.of"), vec![
+    test(include_str!("comments.sf"), vec![
         id("token"), id("here"), 
         id("these"), id("should"), id("though"), 
         doc_out(" this is a doc comment\n this should be concatenated"),
@@ -80,7 +80,7 @@ fn comments() -> Result<(), Vec<Simple<char>>> {
 
 #[test]
 fn add_one() -> Result<(), Vec<Simple<char>>> {
-    test(include_str!("add_one.of"), vec![
+    test(include_str!("add_one.sf"), vec![
         doc_in(" crate about arithmetic idk"),
 
         doc_out(" Adds one to the given number"),
