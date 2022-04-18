@@ -131,7 +131,7 @@ impl From<&str> for Path {
 fn path_part() -> impl Parser<Token, PathPart, Error = Simple<Token>> {
     just(KW_SUPER).to(PathPart::Super)
         .or(just(KW_SELF).to(PathPart::Selff))
-        .or(ident().map(|idt| PathPart::Id(idt)))
+        .or(ident::ident().map(|idt| PathPart::Id(idt)))
 }
 
 pub fn path() -> impl Parser<Token, Path, Error = Simple<Token>> {

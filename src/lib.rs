@@ -1,18 +1,16 @@
-pub mod lexer;
-
 use chumsky::{prelude::*, Stream, chain::Chain};
-// use lexer::prelude::*;
 
-type Span = std::ops::Range<usize>;
+/// A type representing a span of input text 
+pub type Span = std::ops::Range<usize>;
+/// A type representing an optional AST node, with Err holding a [`Span`]
 pub type Opt<T> = Result<T, Span>;
 
-pub(crate) mod part;
-mod prelude;
+pub mod lexer;
+mod parser;
 
-#[cfg(test)]
-mod tests;
+#[cfg(test)] mod tests;
 
-use prelude::*;
+use parser::prelude::*;
 
 pub fn create() -> impl Parser<Token, Vec<Item>, Error = Simple<Token>> {
     item::item()
@@ -50,3 +48,4 @@ where
     // final output
     ParserOutput{out, lexer_errors, parser_errors}
 }
+

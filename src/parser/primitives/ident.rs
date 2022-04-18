@@ -1,16 +1,11 @@
 use std::ops::Deref;
 
-pub mod attribute;
-pub mod item;
-pub mod path;
-pub mod macros;
-
-use crate::prelude::*;
+use crate::parser::prelude::*;
 
 /// A struct that holds some extra information about a string
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Ident {
-    id: String,
+    pub(crate) id: String,
 }
 
 impl Ident {
