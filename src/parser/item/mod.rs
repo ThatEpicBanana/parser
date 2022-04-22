@@ -1,5 +1,7 @@
 use crate::prelude::*;
 
+pub use attribute::inner_attribute;
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum Item {
     InnerAttribute(Opt<attribute::Attribute>),
@@ -7,5 +9,5 @@ pub enum Item {
 }
 
 pub fn item() -> impl Parser<Token, Item, Error = Simple<Token>> {
-    attribute::inner_attribute().map(Item::InnerAttribute)
+    inner_attribute().map(Item::InnerAttribute)
 }

@@ -10,7 +10,7 @@ mod parser;
 
 #[cfg(test)] mod tests;
 
-use parser::prelude::*;
+use crate::parser::prelude::*;
 
 pub fn create() -> impl Parser<Token, Vec<Item>, Error = Simple<Token>> {
     item::item()

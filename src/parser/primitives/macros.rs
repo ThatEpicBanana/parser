@@ -148,31 +148,29 @@ pub fn token_group() -> impl Parser<Token, Opt<TokenGroup>, Error = Simple<Token
 }
 
 
-
-
-/// Parses a token group of the given [`Delimiter`]
-pub fn token_group_of(delimiter: Delimiter) -> impl Parser<Token, Opt<TokenGroup>, Error = Simple<Token>> {
-    match delimiter {
-        Delimiter::Curly => token_group_inner(
-            token_group(), 
-            OP_LCURLY, OP_RCURLY, 
-            [(OP_LPARA, OP_RPARA), (OP_LSQUARE, OP_RSQUARE), (OP_LANGLE, OP_RANGLE)], 
-            Delimiter::Curly
-        ),
-        Delimiter::Parantheses => token_group_inner(
-            token_group(), 
-            OP_LPARA, OP_RPARA, 
-            [(OP_LCURLY, OP_RCURLY), (OP_LSQUARE, OP_RSQUARE), (OP_LANGLE, OP_RANGLE)], 
-            Delimiter::Parantheses
-        ),
-        Delimiter::Square => token_group_inner(
-            token_group(), 
-            OP_LSQUARE, OP_RSQUARE, 
-            [(OP_LCURLY, OP_RCURLY), (OP_LPARA, OP_RPARA), (OP_LANGLE, OP_RANGLE)], 
-            Delimiter::Square
-        ),
-    }
-}
+// /// Parses a token group of the given [`Delimiter`]
+// pub fn token_group_of(delimiter: Delimiter) -> impl Parser<Token, Opt<TokenGroup>, Error = Simple<Token>> {
+//     match delimiter {
+//         Delimiter::Curly => token_group_inner(
+//             token_group(), 
+//             OP_LCURLY, OP_RCURLY, 
+//             [(OP_LPARA, OP_RPARA), (OP_LSQUARE, OP_RSQUARE), (OP_LANGLE, OP_RANGLE)], 
+//             Delimiter::Curly
+//         ),
+//         Delimiter::Parantheses => token_group_inner(
+//             token_group(), 
+//             OP_LPARA, OP_RPARA, 
+//             [(OP_LCURLY, OP_RCURLY), (OP_LSQUARE, OP_RSQUARE), (OP_LANGLE, OP_RANGLE)], 
+//             Delimiter::Parantheses
+//         ),
+//         Delimiter::Square => token_group_inner(
+//             token_group(), 
+//             OP_LSQUARE, OP_RSQUARE, 
+//             [(OP_LCURLY, OP_RCURLY), (OP_LPARA, OP_RPARA), (OP_LANGLE, OP_RANGLE)], 
+//             Delimiter::Square
+//         ),
+//     }
+// }
 
 // outer facing token stream
 /// Creates a token stream that takes in tokens or token groups until `end` is found
